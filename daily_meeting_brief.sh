@@ -1,5 +1,5 @@
 #!/bin/bash
-# Daily 5 PM job: fetch today's customer meetings from Granola and post to #lead-briefs
+# Daily 5:15 PM IST job: fetch today's customer meetings from Granola and post to #lead-briefs
 
 TODAY=$(date +"%Y-%m-%d")
 
