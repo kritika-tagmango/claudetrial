@@ -1,0 +1,10 @@
+[Unit]
+Description=Daily meeting brief — fetch Granola calls and post summaries to Slack
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/user/claudetrial/daily_meeting_brief.sh
+StandardOutput=append:/home/user/claudetrial/meeting_brief.log
+StandardError=append:/home/user/claudetrial/meeting_brief.log

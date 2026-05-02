@@ -1,0 +1,10 @@
+[Unit]
+Description=Daily lead brief — fetch Calendly bookings and post enriched briefs to Slack
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/user/claudetrial/daily_lead_brief.sh
+StandardOutput=append:/home/user/claudetrial/lead_brief.log
+StandardError=append:/home/user/claudetrial/lead_brief.log
