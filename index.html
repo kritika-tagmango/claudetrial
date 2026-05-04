@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Meeting Brief · May 4, 2026</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f1f5f9;
+      --surface: #fff;
+      --border: #e2e8f0;
+      --text: #1e293b;
+      --muted: #64748b;
+      --primary: #1e3a5f;
+      --cust: #0369a1;
+      --cust-bg: #e0f2fe;
+      --int: #6d28d9;
+      --int-bg: #ede9fe;
+      --sidebar: 260px;
+      --hdr: 70px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.5; }
+
+    /* Header */
+    .hdr { height: var(--hdr); background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 12px rgba(0,0,0,.25); }
+    .hdr-brand { font-size: .72rem; opacity: .6; letter-spacing: .05em; margin-bottom: 2px; }
+    .hdr-title { font-size: 1.1rem; font-weight: 700; letter-spacing: -.02em; }
+    .hdr-title span { font-weight: 400; opacity: .7; font-size: .95rem; }
+    .hdr-stats { display: flex; gap: 28px; }
+    .hdr-stat-n { font-size: 1.55rem; font-weight: 700; line-height: 1; }
+    .hdr-stat-l { font-size: .68rem; opacity: .6; text-transform: uppercase; letter-spacing: .07em; margin-top: 1px; }
+
+    /* Layout */
+    .layout { display: flex; }
+
+    /* Sidebar */
+    .sidebar { width: var(--sidebar); flex-shrink: 0; position: sticky; top: var(--hdr); height: calc(100vh - var(--hdr)); overflow-y: auto; background: var(--surface); border-right: 1px solid var(--border); padding: 14px 0; }
+    .sb-label { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); padding: 6px 16px 4px; }
+    .sb-item { display: flex; align-items: center; gap: 10px; padding: 9px 16px; color: var(--text); text-decoration: none; font-size: .82rem; border-left: 3px solid transparent; transition: background .12s, border-color .12s; }
+    .sb-item:hover { background: var(--bg); border-left-color: var(--primary); }
+    .sb-time { font-size: .72rem; color: var(--muted); min-width: 52px; }
+    .sb-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .sb-item.customer .sb-dot { background: var(--cust); }
+    .sb-item.internal .sb-dot { background: var(--int); }
+    .sb-title { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+
+    /* Main */
+    .main { flex: 1; min-width: 0; padding: 24px 32px; max-width: 860px; }
+    .legend { display: flex; gap: 18px; font-size: .78rem; color: var(--muted); margin-bottom: 20px; }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-dot { width: 9px; height: 9px; border-radius: 50%; }
+    .legend-dot.customer { background: var(--cust); }
+    .legend-dot.internal { background: var(--int); }
+
+    /* Cards */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 20px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+    .card-hdr { display: flex; align-items: center; gap: 14px; padding: 15px 20px; border-bottom: 1px solid var(--border); }
+    .card-time { font-size: .74rem; font-weight: 700; color: #fff; padding: 4px 10px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
+    .card.customer .card-time { background: var(--cust); }
+    .card.internal .card-time { background: var(--int); }
+    .card-info { flex: 1; min-width: 0; }
+    .card-title { font-size: .96rem; font-weight: 600; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-people { font-size: .77rem; color: var(--muted); }
+    .badge { font-size: .67rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 3px 8px; border-radius: 4px; flex-shrink: 0; }
+    .card.customer .badge { background: var(--cust-bg); color: var(--cust); }
+    .card.internal .badge { background: var(--int-bg); color: var(--int); }
+    .card-body { padding: 18px 20px; }
+
+    /* Summary markdown */
+    .summary h3 { font-size: .8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: .05em; margin: 18px 0 8px; padding-bottom: 5px; border-bottom: 1px solid var(--border); }
+    .summary h3:first-child { margin-top: 0; }
+    .summary ul { list-style: none; margin: 0; padding: 0; }
+    .summary li { font-size: .855rem; line-height: 1.55; color: #334155; padding: 2px 0 2px 16px; position: relative; }
+    .summary li::before { content: '·'; position: absolute; left: 5px; color: var(--muted); }
+    .summary li.sub-1 { padding-left: 32px; color: #475569; }
+    .summary li.sub-2 { padding-left: 48px; color: #64748b; }
+    .summary li.sub-1::before, .summary li.sub-2::before { content: '›'; }
+    .summary p { font-size: .855rem; color: #334155; line-height: 1.55; margin: 4px 0; }
+    .summary strong { font-weight: 600; color: var(--text); }
+    .summary code { font-size: .8em; background: #f1f5f9; padding: 1px 4px; border-radius: 3px; font-family: 'SF Mono', Consolas, monospace; }
+    .no-summary { text-align: center; padding: 22px; color: var(--muted); font-size: .85rem; font-style: italic; }
+
+    @media (max-width: 720px) {
+      .sidebar { display: none; }
+      .main { padding: 16px; }
+      .hdr-stats { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="hdr">
+  <div>
+    <div class="hdr-brand">TagMango · Kritika Gupta</div>
+    <div class="hdr-title">Daily Meeting Brief <span>· Monday, May 4 2026</span></div>
+  </div>
+  <div class="hdr-stats">
+    <div><div class="hdr-stat-n">8</div><div class="hdr-stat-l">meetings</div></div>
+    <div><div class="hdr-stat-n">7</div><div class="hdr-stat-l">customer calls</div></div>
+    <div><div class="hdr-stat-n">1</div><div class="hdr-stat-l">internal</div></div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar"></nav>
+  <main class="main" id="main">
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot customer"></div> Customer call</div>
+      <div class="legend-item"><div class="legend-dot internal"></div> Internal</div>
+    </div>
+  </main>
+</div>
+
+<script>
+const MEETINGS = [
+  {
+    id: 'm1', time: '8:15 AM', title: 'Yogendra ↔ TagMango', type: 'customer',
+    people: 'Kritika Gupta',
+    summary: `### Competitor Analysis — Graphy
+
+-   AI avatar training to speak like user
+-   iOS app support, WhatsApp integration, AI-powered landing page builder
+-   No setup fees, monthly subscription only
+-   Lower pricing vs Tagmango
+
+### Platform Migration Requirements
+
+-   Current setup: Zoho Trainer Central + Zoho CRM
+    -   5,000 contacts in CRM
+    -   ₹4k/month for Trainer Central
+    -   ₹10k/month for Zoom webinar (300 participants)
+    -   ₹6,500/month for DoubleTick WhatsApp API
+-   Migration timeline: 3–4 weeks
+    -   Same-day web dashboard access
+    -   2–3 days for domain verification
+    -   User data migration handled by Tagmango (free first migration)
+
+### Pricing — Decision Factors
+
+-   **Enterprise setup:** ₹75k one-time (25% ILH discount from ₹1,00,000)
+    -   Web + iOS/Android apps, custom website, success manager, 2-year Zoom
+    -   No-cost EMI: 3–12 months via credit card
+-   **Subscription options:**
+    1.  Pro Annual: ₹50k/year + Zoom 300 — saves 50% on current Zoom costs
+    2.  Advanced Monthly: ₹15k/month + 2.5% commission (includes payment gateway)
+-   Current monthly spend: ₹20,500 (Trainer Central + Zoom + DoubleTick)
+-   Advanced plan needed for community features + affiliate system
+
+### Next Steps
+
+-   Kritika: Share DoubleTick integration feasibility and costs by PM today
+-   Kritika: Send proposals for Enterprise + Pro Annual and Enterprise + Advanced Monthly
+-   Customer: Evaluate against Graphy proposal
+-   Kritika: Follow up in 2 days`
+  },
+  {
+    id: 'm2', time: '11:00 AM', title: 'Weekly Townhall', type: 'internal',
+    people: 'Kritika Gupta + team',
+    summary: `### Revenue & Growth
+
+-   Last month driven by Radish One (50% contribution)
+-   Ad campaigns restarting this month
+    -   Repositioned "Mango Launchpad" → "One Launch Away"
+    -   New focus: AI learning + product systems integration
+-   4 partners established for structured recording sessions
+
+### Customer Success
+
+-   Targeting 130 coaches with sub-1.5% PGS rates
+-   Automated inactive coach tracking system live
+    -   Flags no earnings (3 months) or no dashboard activity (1 month)
+    -   40+ coaches contacted for reactivation
+-   Testimonial target: 4 per team member monthly (25–30 total)
+-   FPR event highlight: coaches spontaneously lined up for testimonials
+
+### Product Sprint
+
+-   Week 3 of current sprint — code freeze today
+-   Focus: consultation revenue + platform stability
+-   Major cost reduction: replacing Fin AI with Shoe
+-   AI Copilot testing begins this week
+-   Global server deployment initiated (addressing US region latency)
+
+### AI Co-Founder Demo
+
+-   AI tool for creator onboarding: automated service descriptions, course outlines, brand color integration
+-   Cost: ~₹5–7 per generation, ~₹100–120 per creator/month
+-   Integration with Siddharth hackathon planned
+
+### Platform Stats (2025)
+
+-   16,000 new courses (vs Coursera's 15,000 total)
+-   216,000 content hours (6× Netflix's library)
+-   9 million successful orders (1 every 3.5 seconds)
+-   ₹485 crores processed (₹1.36 crores daily to creators)`
+  },
+  {
+    id: 'm3', time: '12:00 PM', title: 'Yogendra Nathany and Team TagMango', type: 'customer',
+    people: 'Kritika Gupta · Yogendra Nathany',
+    summary: `### Customer Profile
+
+-   Life coaching business — 32K Instagram, 42K LinkedIn followers
+-   Community: 140 members
+-   Current stack: DoubleTick + Zoom (×2) + Zoho CRM + Zoho LMS + Lovable
+-   Recently joined Shakers community using TagMango
+
+### Pain Points
+
+-   Webinar attendance: 111 registered, only 30 showed; restarted paid model at ₹99
+-   Managing too many disconnected tools
+-   WhatsApp group noise causing member attrition
+
+### Platform Discussion
+
+-   White-labeled solution with custom branding/domain
+-   Membership tiers (Silver/Gold/Diamond/Platinum) supported
+-   Payments: Razorpay/PayU/Paytm (India), Stripe (international); T+3 payout
+-   CRM: customer filtering, funnel tracking, user path progression (L0 → L2)
+-   Workshop automations: reminders at 24hrs, 30min, 15min before + 15min into session
+-   DoubleTick integration via Zapier/Pabbly/Webhook — existing triggers won't break
+-   Landing pages can remain on Lovable, integrated with TagMango checkout
+
+### Notes
+
+-   DoubleTick contract paid through October — wants to maintain during transition
+-   Target: 100–200 webinar participants`
+  },
+  {
+    id: 'm4', time: '12:30 PM', title: 'Prakash Kumar Patodia and Team TagMango', type: 'customer',
+    people: 'Kritika Gupta · Prakash Kumar Patodia',
+    summary: `### Customer Profile
+
+-   Neurotherapy training via Zoom workshops + offline sessions
+-   Wants self-paced LMS with students joining anytime + 2× live Q&A/week
+-   Course: 1-hour classes, 2 days/week, 3-month duration (20–30+ hours content)
+-   No payment gateway currently (UPI/bank transfer)
+-   Timeline: ASAP · Budget: limited
+
+### Platform Match
+
+-   White-labeled dashboard, custom domain/branding
+-   Drip content, assignment enforcement (75% pass grade), completion tracking
+-   Built-in Zoom (300–500 people), automated email/WhatsApp reminders
+-   Multiple payment gateways (Razorpay, Paytm, etc.), GST handling
+
+### Pricing — Current Offer (expires May 10)
+
+-   Freedom setup: ₹25,000 + GST one-time (includes 2-year Zoom, 300 people)
+-   Basic plan: 10% commission, 20 GB storage
+-   **Total: ₹29,500 after GST**
+-   Upgrade options:
+    -   Pro: ₹5,000/month, unlimited storage, 2% commission
+    -   Pro Annual: ₹50,000 + GST (₹10,000 discount)
+-   Tip: embedded YouTube/Vimeo links don't count toward storage
+
+### Next Steps
+
+-   Prakash to discuss ₹29,500 investment with business partner
+-   Kritika to send offer details email after call
+-   Follow-up in 2–3 days`
+  },
+  {
+    id: 'm5', time: '3:00 PM', title: 'Amisha Jhawar and Team TagMango', type: 'customer',
+    people: 'Kritika Gupta · Amisha Jhawar (Amis Dance Academy)',
+    summary: `### Customer Profile
+
+-   Amis Dance Academy — seeking mentorship to start online business
+-   Pre-product stage: needs branding, video creation, content development
+-   Operates in dance and yoga space
+
+### Outcome: Service Mismatch
+
+-   TagMango is a SaaS platform, not a mentorship service
+-   Not yet ready for a software platform solution
+
+### Options Discussed
+
+-   Free platform access for future use
+-   Commission-based free package when content is ready (revenue share, no upfront cost)
+
+### Next Steps
+
+-   No immediate engagement
+-   Open invitation to reconnect when branding and content are established`
+  },
+  {
+    id: 'm6', time: '3:30 PM', title: 'Vinita Pathak and Team TagMango', type: 'customer',
+    people: 'Kritika Gupta · Vinita Pathak',
+    summary: `### Platform Demo
+
+-   Showed free TagMango platform: checkout pages, payment success page, WhatsApp community redirect
+-   Course creation: Products → Courses → Create course → link to checkout
+-   Video specs: 5 GB/video max, 30-min videos, 3–4 min upload, direct laptop upload
+
+### Pricing Structure
+
+-   **Free plan:** TagMango branding, no custom domain, no WhatsApp automation, no support
+-   **Paid plans** (setup + subscription — cannot buy subscription standalone):
+    -   Freedom setup (₹25,000) + Basic or Pro plan
+    -   Enterprise setup + Advanced plan
+-   Paid benefits: custom logo, own domain, white-labeled (users don't see TagMango)
+
+### Next Steps
+
+-   Kritika to share demo video YouTube link via WhatsApp
+-   Vinita to review and explore platform independently
+-   Follow-up call when ready to discuss paid plans`
+  },
+  {
+    id: 'm7', time: '4:00 PM', title: 'CMA Deepak TN and Team TagMango', type: 'customer',
+    people: 'Kritika Gupta · Sujith Thiroor · CMA Deepak TN',
+    summary: null
+  },
+  {
+    id: 'm8', time: '4:30 PM', title: 'Renu and Team TagMango', type: 'customer',
+    people: 'Kritika Gupta · Artzncolours',
+    summary: null
+  }
+];
+
+function md(text) {
+  const inline = t => t
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>');
+  const lines = text.split('\n');
+  const out = [];
+  let inList = false;
+  function closeList() { if (inList) { out.push('</ul>'); inList = false; } }
+  for (const line of lines) {
+    if (/^### /.test(line)) {
+      closeList(); out.push(`<h3>${inline(line.slice(4))}</h3>`);
+    } else {
+      const m = line.match(/^(\s*)(?:[-*]|\d+\.)\s+(.*)/);
+      if (m) {
+        const depth = Math.min(Math.floor(m[1].length / 4), 2);
+        if (!inList) { out.push('<ul>'); inList = true; }
+        out.push(`<li${depth > 0 ? ` class="sub-${depth}"` : ''}>${inline(m[2])}</li>`);
+      } else if (line.trim() === '') {
+        closeList();
+      } else {
+        closeList();
+        if (line.trim()) out.push(`<p>${inline(line)}</p>`);
+      }
+    }
+  }
+  closeList();
+  return out.join('\n');
+}
+
+// Sidebar
+document.getElementById('sidebar').innerHTML =
+  '<div class="sb-label">Timeline</div>' +
+  MEETINGS.map(m => `<a class="sb-item ${m.type}" href="#${m.id}">
+    <span class="sb-time">${m.time}</span>
+    <span class="sb-dot"></span>
+    <span class="sb-title">${m.title}</span>
+  </a>`).join('');
+
+// Cards
+const legend = document.querySelector('.legend');
+legend.insertAdjacentHTML('afterend',
+  MEETINGS.map(m => `<div class="card ${m.type}" id="${m.id}">
+    <div class="card-hdr">
+      <span class="card-time">${m.time}</span>
+      <div class="card-info">
+        <div class="card-title">${m.title}</div>
+        <div class="card-people">${m.people}</div>
+      </div>
+      <span class="badge">${m.type === 'customer' ? 'Customer' : 'Internal'}</span>
+    </div>
+    <div class="card-body">${m.summary
+      ? `<div class="summary">${md(m.summary)}</div>`
+      : '<div class="no-summary">Summary not yet available — Granola notes are still being processed.</div>'
+    }</div>
+  </div>`).join('')
+);
+</script>
+</body>
+</html>
