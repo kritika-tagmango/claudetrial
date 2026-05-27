@@ -1,0 +1,34 @@
+name: Daily Pre-Call Sales Intelligence Brief
+
+on:
+  schedule:
+    # 05:00 UTC = 10:30 AM IST (UTC+5:30) — runs every day
+    - cron: '0 5 * * *'
+  workflow_dispatch:
+    # Allow manual trigger for testing
+
+jobs:
+  run-sales-brief:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Claude CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run daily pre-call sales intelligence brief
+        run: bash daily_sales_brief.sh
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Calendly MCP credentials
+          CALENDLY_API_KEY: ${{ secrets.CALENDLY_API_KEY }}
+          # Slack MCP credentials
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
